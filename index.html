@@ -1,0 +1,670 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spooky Surprise for Babu! 🎃</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Caveat:wght@600;700&family=Special+Elite&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* Custom CSS Styling for Vintage Halloween Collage Aesthetic */
+    body {
+      background-color: #0b0710;
+      color: #e2e8f0;
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    /* Creepster Font */
+    .font-creepster {
+      font-family: 'Creepster', cursive;
+    }
+
+    /* Typewriter / Notepad Font */
+    .font-notepad {
+      font-family: 'Special Elite', cursive, monospace;
+    }
+
+    /* Handwriting Font for Sweet Notes */
+    .font-handwriting {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* Ransom Note Letter Mix */
+    .ransom-letter {
+      display: inline-block;
+      padding: 2px 8px;
+      margin: 1px;
+      font-weight: 900;
+      text-transform: uppercase;
+      box-shadow: 2px 3px 0px rgba(0, 0, 0, 0.4);
+      transform: rotate(calc(-4deg + 8deg * var(--r, 0.5)));
+    }
+
+    /* Glowing Pulsing Pumpkin */
+    @keyframes pumpkinPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 15px rgba(255, 115, 0, 0.6)) drop-shadow(0 0 30px rgba(255, 50, 0, 0.4));
+      }
+      50% {
+        transform: scale(1.08);
+        filter: drop-shadow(0 0 25px rgba(255, 140, 0, 0.9)) drop-shadow(0 0 50px rgba(255, 0, 80, 0.6));
+      }
+    }
+
+    .animate-pumpkin {
+      animation: pumpkinPulse 2.2s infinite ease-in-out;
+      cursor: pointer;
+    }
+
+    /* Floating particles / ghosts */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(4deg); }
+    }
+
+    .animate-float {
+      animation: floatSlow 4s infinite ease-in-out;
+    }
+
+    .animate-float-delayed {
+      animation: floatSlow 5s infinite ease-in-out 2s;
+    }
+
+    /* Paper Texture Effect */
+    .paper-texture {
+      background-color: #fbf7ee;
+      background-image: 
+        radial-gradient(#e5d8bf 1px, transparent 0),
+        linear-gradient(to bottom, rgba(240,230,210,0.5), rgba(255,245,230,0.9));
+      background-size: 16px 16px, 100% 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(160, 120, 80, 0.2);
+    }
+
+    /* Envelope Shadow */
+    .envelope-bg {
+      background: #18111e;
+      border: 2px solid #32213d;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Custom Scrollbar for Notepad */
+    .custom-scroll::-webkit-scrollbar {
+      width: 8px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #eee3d0;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c2410c;
+      border-radius: 4px;
+    }
+
+    /* Wobbly Sticker Animations */
+    .sticker {
+      transition: transform 0.3s ease;
+      filter: drop-shadow(3px 5px 2px rgba(0,0,0,0.3));
+    }
+    .sticker:hover {
+      transform: scale(1.15) rotate(5deg) !important;
+    }
+
+    /* Particle Canvas Overlay */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 50;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative select-none">
+
+  <!-- Background Ambience Canvas -->
+  <canvas id="particle-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Dark Atmospheric Background Elements -->
+  <div class="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#ff5500_1px,transparent_1px)] [background-size:24px_24px]"></div>
+  
+  <!-- Spooky Background Vignette -->
+  <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_20%,#000000_90%)]"></div>
+
+  <!-- Background Decorative Floating Icons -->
+  <div class="fixed top-10 left-8 text-orange-600/30 text-5xl animate-float pointer-events-none">
+    <i class="fa-solid fa-ghost"></i>
+  </div>
+  <div class="fixed bottom-12 left-12 text-pink-600/20 text-6xl animate-float-delayed pointer-events-none">
+    <i class="fa-solid fa-bat"></i>
+  </div>
+  <div class="fixed top-20 right-10 text-amber-500/30 text-6xl animate-float pointer-events-none">
+    <i class="fa-solid fa-spider"></i>
+  </div>
+  <div class="fixed bottom-20 right-14 text-purple-600/25 text-5xl animate-float-delayed pointer-events-none">
+    <i class="fa-solid fa-hat-wizard"></i>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <main class="relative z-20 w-full max-w-4xl px-4 py-6 flex flex-col items-center justify-center min-h-screen">
+
+    <!-- SCREEN 1: THE GLOWING PUMPKIN PRESS SCREEN -->
+    <div id="pumpkin-screen" class="flex flex-col items-center justify-center text-center transition-all duration-700 ease-in-out">
+      
+      <div class="mb-6 space-y-2">
+        <span class="inline-block px-4 py-1 rounded-full bg-orange-950/80 border border-orange-500/50 text-orange-400 text-xs sm:text-sm font-semibold tracking-widest uppercase shadow-lg">
+          👻 Top Secret Halloween Invitation 👻
+        </span>
+        <h1 class="text-4xl sm:text-6xl font-creepster text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-400 to-pink-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] tracking-wide">
+          SPOOKY SURPRISE FOR BABU
+        </h1>
+      </div>
+
+      <!-- Interactive Glowing Pumpkin -->
+      <div id="pumpkin-btn" class="animate-pumpkin my-4 relative group" onclick="openLetter()">
+        <!-- Glow Aura -->
+        <div class="absolute -inset-4 rounded-full bg-gradient-to-r from-orange-600 to-pink-600 opacity-40 blur-xl group-hover:opacity-80 transition duration-500"></div>
+        
+        <!-- SVG Jack-O'-Lantern -->
+        <svg class="w-56 h-56 sm:w-72 sm:h-72 relative z-10 transition-transform duration-300 group-hover:scale-105 active:scale-95" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Pumpkin Stem -->
+          <path d="M92 40C92 40 96 18 112 14C115 13 118 16 116 19C110 28 104 38 104 38" stroke="#3f2e18" stroke-width="10" stroke-linecap="round"/>
+          <path d="M102 36C102 36 118 24 126 25" stroke="#224a1d" stroke-width="5" stroke-linecap="round"/>
+          
+          <!-- Pumpkin Body Base -->
+          <ellipse cx="100" cy="115" rx="80" ry="60" fill="url(#pumpkinGrad)"/>
+          <ellipse cx="65" cy="115" rx="50" ry="58" fill="url(#pumpkinGradLeft)"/>
+          <ellipse cx="135" cy="115" rx="50" ry="58" fill="url(#pumpkinGradRight)"/>
+          <ellipse cx="100" cy="115" rx="42" ry="60" fill="url(#pumpkinGradCenter)"/>
+
+          <!-- Pumpkin Ridges Lines -->
+          <path d="M60 58C40 75 30 100 32 125C34 148 50 170 70 174" stroke="#b43a00" stroke-width="3" opacity="0.6"/>
+          <path d="M140 58C160 75 170 100 168 125C166 148 150 170 130 174" stroke="#b43a00" stroke-width="3" opacity="0.6"/>
+          <path d="M85 55C70 75 68 130 80 174" stroke="#b43a00" stroke-width="2.5" opacity="0.5"/>
+          <path d="M115 55C130 75 132 130 120 174" stroke="#b43a00" stroke-width="2.5" opacity="0.5"/>
+
+          <!-- Glowing Carved Face -->
+          <!-- Eyes -->
+          <polygon points="55,90 75,95 65,72" fill="#fff799" filter="url(#yellowGlow)"/>
+          <polygon points="145,90 125,95 135,72" fill="#fff799" filter="url(#yellowGlow)"/>
+          <!-- Nose -->
+          <polygon points="100,98 92,108 108,108" fill="#fff799" filter="url(#yellowGlow)"/>
+          <!-- Spooky Smile -->
+          <path d="M50 125 C 70 160, 130 160, 150 125 C 135 140, 115 145, 100 132 C 85 145, 65 140, 50 125 Z" fill="#fff799" filter="url(#yellowGlow)"/>
+          
+          <!-- Teeth cutouts -->
+          <rect x="75" y="132" width="8" height="8" fill="#d94800"/>
+          <rect x="118" y="134" width="8" height="8" fill="#d94800"/>
+          <rect x="96" y="142" width="8" height="7" fill="#d94800"/>
+
+          <defs>
+            <radialGradient id="pumpkinGrad" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 115) rotate(90) scale(60 80)">
+              <stop stop-color="#ff7b00"/>
+              <stop offset="1" stop-color="#cc3700"/>
+            </radialGradient>
+            <radialGradient id="pumpkinGradLeft" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(65 115) rotate(90) scale(58 50)">
+              <stop stop-color="#ff8800"/>
+              <stop offset="1" stop-color="#aa2b00"/>
+            </radialGradient>
+            <radialGradient id="pumpkinGradRight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(135 115) rotate(90) scale(58 50)">
+              <stop stop-color="#ff8800"/>
+              <stop offset="1" stop-color="#aa2b00"/>
+            </radialGradient>
+            <radialGradient id="pumpkinGradCenter" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(100 115) rotate(90) scale(60 42)">
+              <stop stop-color="#ffa200"/>
+              <stop offset="1" stop-color="#bd3100"/>
+            </radialGradient>
+            <filter id="yellowGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Action Prompt Text -->
+      <div class="mt-4 flex flex-col items-center">
+        <p class="text-lg sm:text-2xl font-bold text-amber-200 animate-pulse flex items-center gap-2">
+          <span>👇</span> Click the Pumpkin to Reveal a Spooky Surprise! <span>🎃</span>
+        </p>
+        <p class="text-xs sm:text-sm text-pink-400/80 mt-1 font-handwriting text-xl">
+          (Made specially for Marceline by PB 💗)
+        </p>
+      </div>
+
+    </div>
+
+    <!-- SCREEN 2: THE SCRAPBOOK NOTEPAD LETTER (Initially Hidden) -->
+    <div id="letter-screen" class="hidden w-full transition-all duration-700 ease-out opacity-0 transform scale-90">
+      
+      <!-- Envelope / Dark Backdrop Box -->
+      <div class="envelope-bg rounded-2xl p-3 sm:p-6 relative max-w-3xl mx-auto border-2 border-amber-900/40">
+        
+        <!-- Top Controls / Back Button -->
+        <div class="flex justify-between items-center mb-3 px-2">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-3 h-3 rounded-full bg-red-500"></span>
+            <span class="inline-block w-3 h-3 rounded-full bg-amber-500"></span>
+            <span class="inline-block w-3 h-3 rounded-full bg-pink-500"></span>
+            <span class="text-xs text-orange-300/70 font-mono ml-2">halloween_invitation.txt</span>
+          </div>
+          <button onclick="closeLetter()" class="text-xs bg-orange-950/80 hover:bg-orange-900 text-orange-200 px-3 py-1.5 rounded-lg border border-orange-500/30 transition flex items-center gap-1 shadow">
+            <i class="fa-solid fa-rotate-left"></i> Re-pack Pumpkin 🎃
+          </button>
+        </div>
+
+        <!-- SCRAPBOOK PAPER CARD -->
+        <div class="paper-texture rounded-xl p-5 sm:p-8 text-stone-900 relative overflow-hidden custom-scroll max-h-[82vh] overflow-y-auto border-2 border-amber-200">
+          
+          <!-- Decorative Paper Clip (Top Right) -->
+          <div class="absolute top-2 right-6 w-5 h-14 border-4 border-stone-400 rounded-full opacity-80 rotate-12 pointer-events-none shadow-sm"></div>
+
+          <!-- Decorative Stamps & Stickers (Collage Theme) -->
+          <!-- Vamp Lips -->
+          <div class="absolute top-4 right-14 text-red-600 text-3xl sm:text-4xl rotate-12 opacity-90 sticker pointer-events-none">
+            💋
+          </div>
+          <!-- Ghost Sticker -->
+          <div class="absolute top-16 right-4 text-stone-800 text-3xl sm:text-4xl -rotate-12 opacity-80 sticker pointer-events-none">
+            👻
+          </div>
+          <!-- Disco Ball Decor Accent -->
+          <div class="absolute top-2 left-4 text-stone-400 text-2xl sm:text-3xl rotate-45 opacity-70 sticker pointer-events-none">
+            🪩
+          </div>
+
+          <!-- PB & Marceline Cute Badge -->
+          <div class="mb-4 inline-flex items-center gap-2 bg-pink-100 border border-pink-300 px-3 py-1 rounded-full text-xs font-bold text-pink-700 shadow-sm rotate-1">
+            <span>👑 Princess Bubblegum</span>
+            <span>&</span>
+            <span>🎸 Marceline</span>
+          </div>
+
+          <!-- RANSOM / CUTOUT STYLE HEADER -->
+          <div class="mb-6 leading-relaxed">
+            <div class="flex flex-wrap items-center gap-1 sm:gap-1.5 text-lg sm:text-2xl font-bold">
+              <span class="ransom-letter bg-orange-600 text-white rounded">🎃 HALLOWEEN</span>
+              <span class="ransom-letter bg-stone-900 text-pink-400 rounded">PICNIC</span>
+              <span class="ransom-letter bg-red-700 text-white rounded">DATE</span>
+              <span class="ransom-letter bg-black text-amber-300 rounded">🖤</span>
+            </div>
+          </div>
+
+          <!-- LETTER CONTENT BODY -->
+          <div class="space-y-4 text-stone-800 font-notepad text-sm sm:text-base leading-relaxed">
+            
+            <p class="text-stone-900 font-semibold">
+              I am inviting you to a picnic Halloween date! Ever since I heard your story about how you didn't get to experience Halloween, I've been meaning to ask you to spend it with me. I've been planning this for almost a month already, and now I'm ready to send this to you. Although we can't really experience the full spooky Halloween trick-or-treating vibes, I still want us to dress up as <span class="bg-red-200 px-1.5 py-0.5 rounded font-bold text-red-800">Marceline</span> and <span class="bg-pink-200 px-1.5 py-0.5 rounded font-bold text-pink-800">Princess Bubblegum</span>!! Just a chill date with snacks, a nice view, and maybe kisses 😏✌️
+            </p>
+
+            <p class="italic text-stone-700 bg-amber-100/70 p-3 rounded-lg border-l-4 border-amber-500">
+              I prepared a mini itinerary for us!! I chose a budget-friendly date and an accessible place since for sure, everyone's gonna be outside around that time too hehe.
+            </p>
+
+            <!-- EVENT DETAILS BADGE BOX -->
+            <div class="my-4 p-4 rounded-xl bg-stone-900 text-amber-100 shadow-inner flex flex-col sm:flex-row justify-around items-center gap-3 border border-amber-700/50">
+              <div class="text-center sm:text-left">
+                <span class="text-xs uppercase tracking-widest text-amber-400 font-bold block">WHEN 🗓️</span>
+                <span class="text-lg sm:text-xl font-bold text-white">October 29–30</span>
+              </div>
+              <div class="h-8 w-px bg-amber-800 hidden sm:block"></div>
+              <div class="text-center sm:text-left">
+                <span class="text-xs uppercase tracking-widest text-pink-400 font-bold block">TIME ⏰</span>
+                <span class="text-lg sm:text-xl font-bold text-white">3:00 PM</span>
+              </div>
+            </div>
+
+            <!-- ITINERARY SECTION -->
+            <div class="space-y-3 pt-2">
+              <h3 class="text-base sm:text-lg font-bold text-pink-700 flex items-center gap-2 border-b-2 border-pink-300 pb-1">
+                <span>🎀</span> OUR LITTLE ITINERARY!!
+              </h3>
+
+              <!-- Item 1 -->
+              <div class="bg-white/80 p-3.5 rounded-lg border border-stone-300 shadow-sm space-y-2">
+                <h4 class="font-bold text-stone-900 text-sm sm:text-base text-orange-700 flex items-center gap-1.5">
+                  <span>1.</span> Picnic date with Building Blocks 🧱
+                </h4>
+                <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-stone-700 pl-1">
+                  <li>Roam around Luneta Park, stroll at the Chinese Garden, and wherever our little hearts desire 🌸</li>
+                  <li>Then, if we get tired, let's find a spot on the grass near the water fountain and settle down there :P ⛲</li>
+                  <li>Eat our snacks, take lots of pics, and build Squidward's house together!! 🧽🗿</li>
+                  <li>Basically, quality time together but we're all dressed up hehe &gt;:D 🧛‍♀️👑</li>
+                </ul>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="bg-white/80 p-3.5 rounded-lg border border-stone-300 shadow-sm space-y-2">
+                <h4 class="font-bold text-stone-900 text-sm sm:text-base text-purple-800 flex items-center gap-1.5">
+                  <span>2.</span> Chill movie night 🍿
+                </h4>
+                <ul class="list-disc list-inside space-y-1 text-xs sm:text-sm text-stone-700 pl-1">
+                  <li>Chill at the dorm and watch cartoon horror onli 👻</li>
+                  <li>Let's cook Buldak together and eat while we watch ^-^ 🍜🔥</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- WHAT TO BRING SECTION -->
+            <div class="pt-2">
+              <h3 class="text-base sm:text-lg font-bold text-orange-700 flex items-center gap-2 border-b-2 border-orange-300 pb-1">
+                <span>🎒</span> WHAT TO BRING!!
+              </h3>
+              <ul class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
+                <li class="bg-orange-100/80 p-2 rounded border border-orange-200 font-medium">✨ Yourself, of course!! The most important one :P</li>
+                <li class="bg-blue-100/80 p-2 rounded border border-blue-200 font-medium">💧 Your own water</li>
+                <li class="bg-purple-100/80 p-2 rounded border border-purple-200 font-medium">☂️ Payong</li>
+                <li class="bg-green-100/80 p-2 rounded border border-green-200 font-medium">💸 Your pamasahe</li>
+              </ul>
+            </div>
+
+            <p class="pt-2 text-stone-800">
+              Let's meet up there, no need to sundo me. I've got the snacks covered, but if u wanna bring something too, that's good as well! Anything is fine as long as we're together 💗
+            </p>
+
+            <p class="font-bold text-pink-700 text-base sm:text-lg pt-1">
+              I'm really looking forward to spending my first Halloween with you, babu!! I hope we get to make lots of cute little memories together. SEE YOU MWAAAA 💋✨
+            </p>
+
+            <!-- P.S. SECTIONS (Handwritten/Collage feel) -->
+            <div class="space-y-3 pt-4 border-t-2 border-dashed border-stone-400">
+              
+              <!-- PS 1 -->
+              <div class="bg-amber-100/90 p-3 rounded-lg border border-amber-300 text-xs sm:text-sm text-stone-800 space-y-1 relative">
+                <span class="font-bold text-red-600 block">P.S.</span>
+                <p>
+                  ANG TAGAL KO NA 'TONG PINLANO 😭😭 I didn't wanna tell you pa kasi I wanted everything to go according to plan (as an itinerary typa girl 🤓☝️). TAPOS NAGULAT AKO NUNG BINANGGIT MO NA MAGD-DRESS UP TAYO TOGETHER AND I WAS LIKE... NO WE CAN'T BE MARCELINE... PFFFTTTT!! 😭😭 BUT HERE IT ISSS RAAAAHHHH
+                </p>
+              </div>
+
+              <!-- PS 2 -->
+              <div class="bg-pink-100/90 p-3 rounded-lg border border-pink-300 text-xs sm:text-sm text-stone-800 space-y-1 relative">
+                <span class="font-bold text-pink-700 block">P.P.S.</span>
+                <p>
+                  I JUST BOUGHT A DRESS FROM UKAY NA KASAMA KITA, BUT I HAD A SECRET MOTIVE WITH ASH LMAOOO 😭😭 She actually hid my dress because I wasn't done with coding this + preparing everything yet!! HELP I WAS TRYING SO HARD NOT TO SPOIL ANYTHING ☹️☝️
+                </p>
+              </div>
+
+            </div>
+
+            <!-- CLOSING EXPRESSION -->
+            <div class="text-center pt-6 pb-2">
+              <p class="font-creepster text-2xl sm:text-3xl text-red-600 tracking-wider">
+                ANYWAYYYY, I LOVE YOU, BABU!! 🎃💗
+              </p>
+              <p class="font-handwriting text-2xl sm:text-3xl text-pink-600 font-bold mt-1">
+                I CAN'T WAIT TO BE THE PB TO UR MARCY 🥰
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Bottom Cute Stickers Collage -->
+          <div class="flex justify-between items-center mt-6 pt-3 border-t border-stone-300 text-2xl">
+            <span class="sticker cursor-pointer" title="Axe Guitar!">🎸</span>
+            <span class="sticker cursor-pointer" title="Candy Kingdom Crown!">👑</span>
+            <span class="sticker cursor-pointer" title="Spiderweb!">🕸️</span>
+            <span class="sticker cursor-pointer" title="Spooky Bat!">🦇</span>
+            <span class="sticker cursor-pointer" title="Love!">💖</span>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC & AUDIO SYNTH -->
+  <script>
+    // Audio Synth Generator (No external audio assets needed!)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+    }
+
+    // Play cute spooky magic sound effect when pumpkin is clicked
+    function playSpookySound() {
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+
+        // Sound 1: Magical Arpeggio / Chime
+        const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, index) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now + index * 0.08);
+
+          gain.gain.setValueAtTime(0.15, now + index * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.08 + 0.4);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now + index * 0.08);
+          osc.stop(now + index * 0.08 + 0.5);
+        });
+
+        // Sound 2: Warm Playful Bass Drop
+        const bassOsc = audioCtx.createOscillator();
+        const bassGain = audioCtx.createGain();
+        bassOsc.type = 'sine';
+        bassOsc.frequency.setValueAtTime(180, now);
+        bassOsc.frequency.exponentialRampToValueAtTime(60, now + 0.6);
+
+        bassGain.gain.setValueAtTime(0.3, now);
+        bassGain.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+
+        bassOsc.connect(bassGain);
+        bassGain.connect(audioCtx.destination);
+
+        bassOsc.start(now);
+        bassOsc.stop(now + 0.6);
+
+      } catch (e) {
+        console.log("Audio play blocked or unsupported", e);
+      }
+    }
+
+    // Interactive Screen Transition
+    function openLetter() {
+      playSpookySound();
+      triggerBurstConfetti();
+
+      const pumpkinScreen = document.getElementById('pumpkin-screen');
+      const letterScreen = document.getElementById('letter-screen');
+
+      // Fade out pumpkin screen
+      pumpkinScreen.classList.add('opacity-0', 'scale-95');
+
+      setTimeout(() => {
+        pumpkinScreen.classList.add('hidden');
+        letterScreen.classList.remove('hidden');
+
+        // Trigger reflow for transition
+        void letterScreen.offsetWidth;
+
+        letterScreen.classList.remove('opacity-0', 'scale-90');
+        letterScreen.classList.add('opacity-100', 'scale-100');
+      }, 400);
+    }
+
+    function closeLetter() {
+      const pumpkinScreen = document.getElementById('pumpkin-screen');
+      const letterScreen = document.getElementById('letter-screen');
+
+      letterScreen.classList.remove('opacity-100', 'scale-100');
+      letterScreen.classList.add('opacity-0', 'scale-90');
+
+      setTimeout(() => {
+        letterScreen.classList.add('hidden');
+        pumpkinScreen.classList.remove('hidden');
+
+        void pumpkinScreen.offsetWidth;
+
+        pumpkinScreen.classList.remove('opacity-0', 'scale-95');
+        pumpkinScreen.classList.add('opacity-100', 'scale-100');
+      }, 400);
+    }
+
+    /* -------------------------------------------------------------
+       BACKGROUND FLOATING PARTICLES (GHOSTS, BATS, STARS)
+    ------------------------------------------------------------- */
+    const bgCanvas = document.getElementById('particle-canvas');
+    const bgCtx = bgCanvas.getContext('2d');
+
+    let width, height;
+    function resizeBgCanvas() {
+      width = bgCanvas.width = window.innerWidth;
+      height = bgCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeBgCanvas);
+    resizeBgCanvas();
+
+    const bgParticles = [];
+    const particleTypes = ['✨', '🦇', '👻', '🎃', '💖', '⭐'];
+
+    for (let i = 0; i < 35; i++) {
+      bgParticles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        size: Math.random() * 16 + 12,
+        speedY: - (Math.random() * 0.6 + 0.2),
+        speedX: (Math.random() - 0.5) * 0.4,
+        type: particleTypes[Math.floor(Math.random() * particleTypes.length)],
+        opacity: Math.random() * 0.6 + 0.2
+      });
+    }
+
+    function animateBgParticles() {
+      bgCtx.clearRect(0, 0, width, height);
+
+      bgParticles.forEach(p => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+
+        if (p.y < -30) {
+          p.y = height + 30;
+          p.x = Math.random() * width;
+        }
+
+        bgCtx.save();
+        bgCtx.globalAlpha = p.opacity;
+        bgCtx.font = `${p.size}px serif`;
+        bgCtx.fillText(p.type, p.x, p.y);
+        bgCtx.restore();
+      });
+
+      requestAnimationFrame(animateBgParticles);
+    }
+    animateBgParticles();
+
+    /* -------------------------------------------------------------
+       BURST CONFETTI/HEARTS CELEBRATION EFFECT ON CLICK
+    ------------------------------------------------------------- */
+    const confettiCanvas = document.getElementById('confetti-canvas');
+    const confettiCtx = confettiCanvas.getContext('2d');
+
+    function resizeConfettiCanvas() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeConfettiCanvas);
+    resizeConfettiCanvas();
+
+    let confettiList = [];
+
+    function triggerBurstConfetti() {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const shapes = ['💖', '🎃', '🦇', '✨', '👑', '💋', '🍬'];
+
+      for (let i = 0; i < 70; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 12 + 4;
+        confettiList.push({
+          x: centerX,
+          y: centerY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          size: Math.random() * 20 + 14,
+          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          gravity: 0.25,
+          alpha: 1,
+          decay: Math.random() * 0.02 + 0.015,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 10
+        });
+      }
+    }
+
+    function animateConfetti() {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+      confettiList.forEach((c, index) => {
+        c.x += c.vx;
+        c.y += c.vy;
+        c.vy += c.gravity;
+        c.alpha -= c.decay;
+        c.rotation += c.rotSpeed;
+
+        confettiCtx.save();
+        confettiCtx.globalAlpha = Math.max(0, c.alpha);
+        confettiCtx.translate(c.x, c.y);
+        confettiCtx.rotate((c.rotation * Math.PI) / 180);
+        confettiCtx.font = `${c.size}px serif`;
+        confettiCtx.fillText(c.shape, -c.size / 2, c.size / 2);
+        confettiCtx.restore();
+
+        if (c.alpha <= 0) {
+          confettiList.splice(index, 1);
+        }
+      });
+
+      requestAnimationFrame(animateConfetti);
+    }
+    animateConfetti();
+
+    // Randomize ransom letter angles dynamically for scrapbook look
+    document.querySelectorAll('.ransom-letter').forEach(el => {
+      el.style.setProperty('--r', Math.random());
+    });
+  </script>
+</body>
+</html>
+```
